@@ -1,0 +1,37 @@
+spring:
+  profiles: local
+
+eureka:
+  client:
+    enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8089/eureka/
+
+server:
+  port: 8080
+
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      clientId: betting-app-v2-kasdlj
+      clientSecret: ${CLIENT_SECRET}
+      accessTokenUri: http://localhost:7070/auth/oauth/token
+      userAuthorizationUri: http://localhost:7070/auth/oauth/authorize
+    resource:
+      userInfoUri: http://localhost:7070/auth/users/me
+
+zuul:
+  prefix: /
+  sensitiveHeaders: Cookie, Set-Cookie
+  routes:
+    authorization-server:
+      path: /authorization-server/**
+      url: http://localhost:7070/auth
+    user-service:
+      path: /user-service/**
+      url: http://localhost:8010/
+
+encrypt:
+  key: ${ENCRYPT_KEY}
